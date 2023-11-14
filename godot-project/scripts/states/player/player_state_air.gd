@@ -38,5 +38,5 @@ func physics_update(delta) -> void:
 
 
 func begin(message: Dictionary = {}) -> void:
-	if message.jump:
+	if message.has("jump") and message.jump == true:
 		player.velocity.y = JUMP_VELOCITY
