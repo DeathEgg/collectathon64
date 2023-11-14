@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1civaffp4cum"]
+
+[ext_resource type="PackedScene" uid="uid://x0ujt41u6f3" path="res://scenes/player.tscn" id="1_q06ur"]
+[ext_resource type="PackedScene" uid="uid://do1jdofvf1qll" path="res://scenes/camera_manager.tscn" id="2_56ffp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_q4w3m"]
+size = Vector3(25, 1, 25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xiw8f"]
+size = Vector3(25, 1, 25)
+
+[node name="Main" type="Node"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1.00242, 0, 0, 0, 1.00242, 0, 0, 0, 1.00242, 0.0194077, 0, -0.010602)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_q4w3m")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_xiw8f")
+
+[node name="Player" parent="." node_paths=PackedStringArray("camera_manager") instance=ExtResource("1_q06ur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.77149, 0)
+camera_manager = NodePath("../CameraManager")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.759078, 0.650999, 0, -0.650999, 0.759078, 0, 11.4305, 20.163)
+
+[node name="CameraManager" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_56ffp")]
+target = NodePath("../Player")

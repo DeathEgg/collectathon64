@@ -1,0 +1,39 @@
+[gd_scene load_steps=9 format=3 uid="uid://x0ujt41u6f3"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_6un1i"]
+[ext_resource type="Script" path="res://scripts/state_machine.gd" id="2_wp0gc"]
+[ext_resource type="Script" path="res://scripts/states/player/player_state_idle.gd" id="3_s5tx1"]
+[ext_resource type="Script" path="res://scripts/states/player/player_state_walk.gd" id="4_kwsvc"]
+[ext_resource type="Script" path="res://scripts/states/player/player_state_air.gd" id="5_a34fg"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i21yo"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rseqs"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_mjas0"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_6un1i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_i21yo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_rseqs")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("2_wp0gc")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("3_s5tx1")
+
+[node name="Walk" type="Node" parent="StateMachine"]
+script = ExtResource("4_kwsvc")
+
+[node name="Air" type="Node" parent="StateMachine"]
+script = ExtResource("5_a34fg")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.496107, 0, 0, 0, 0.382032, 0, 0.384072, 0.459374)
+mesh = SubResource("BoxMesh_mjas0")
