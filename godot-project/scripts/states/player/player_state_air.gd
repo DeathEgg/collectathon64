@@ -5,21 +5,25 @@ const _JUMP_VELOCITY = 8.0
 const _VARIABLE_JUMP_HEIGHT_MAX_SPEED = 3.0
 var _jumped = false
 
+func _jump():
+	player.velocity.y = _JUMP_VELOCITY
+	_jumped = true
+
+
 func input(event : InputEvent) -> void:
 	# jump during coyote time
 	if not _jumped and Input.is_action_just_pressed("jump") and player.coyote_time > 0:
-		player.velocity.y = _JUMP_VELOCITY
-		_jumped = true
-	# variable jump height
-	elif _jumped and Input.is_action_just_released("jump"):
-		print(player.velocity.y)
-		if player.velocity.y > _VARIABLE_JUMP_HEIGHT_MAX_SPEED:
-			player.velocity.y = _VARIABLE_JUMP_HEIGHT_MAX_SPEED
+		_jump()
 
 
 func physics_update(delta) -> void:
 	player.apply_gravity(delta)
 	player.coyote_time -= delta
+	
+	# variable jump height (it's here rather than input due to jump buffering)
+	if _jumped and not Input.is_action_pressed("jump"):
+		if player.velocity.y > _VARIABLE_JUMP_HEIGHT_MAX_SPEED:
+			player.velocity.y = _VARIABLE_JUMP_HEIGHT_MAX_SPEED
 	
 	# movement
 	var input = Vector3.ZERO
@@ -45,13 +49,15 @@ func physics_update(delta) -> void:
 	
 	# check if the player has landed
 	if player.is_on_floor():
-		state_machine.transition_to("Walk")
+		if player.jump_buffer_active():
+			_jump()
+		else:
+			state_machine.transition_to("Walk")
 
 
 func begin(message: Dictionary = {}) -> void:
 	if message.has("jump") and message.jump == true:
-		player.velocity.y = _JUMP_VELOCITY
-		_jumped = true
+		_jump()
 
 
 func end(message: Dictionary = {}) -> void:
