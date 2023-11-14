@@ -2,13 +2,18 @@ class_name PlayerStateAir extends PlayerState
 
 
 const JUMP_VELOCITY = 8.0
+var jumped = false
 
 func input(event : InputEvent) -> void:
-	pass
+	if Input.is_action_just_pressed("jump") and player.coyote_time:
+		player.velocity.y = JUMP_VELOCITY
+		jumped = true
 
 
 func physics_update(delta) -> void:
 	player.apply_gravity(delta)
+	
+	player.coyote_time -= delta
 	
 	# movement
 	var input = Vector3.ZERO
@@ -40,3 +45,10 @@ func physics_update(delta) -> void:
 func begin(message: Dictionary = {}) -> void:
 	if message.has("jump") and message.jump == true:
 		player.velocity.y = JUMP_VELOCITY
+		jumped = true
+	else:
+		jumped = false
+
+
+func end(message: Dictionary = {}) -> void:
+	player.coyote_time = player.COYOTE_TIME_MAX
