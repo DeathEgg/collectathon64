@@ -16,8 +16,7 @@ func physics_update(delta) -> void:
 	var movement_velocity: Vector3 = down_slope_direction * player.movement_speed * delta
 	var applied_velocity = player.velocity.lerp(movement_velocity, delta * 10)
 	
-	player.velocity.x = applied_velocity.x
-	player.velocity.z = applied_velocity.z
+	player.velocity = applied_velocity
 	
 	player.move_and_slide()
 	player.rotate_toward_forward_vector(delta)
