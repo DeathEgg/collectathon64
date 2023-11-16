@@ -25,9 +25,11 @@ func physics_update(delta) -> void:
 	if player.is_on_walkable_angle():
 		state_machine.transition_to("Walk")
 		return
-	
-	# todo: spawn dust particles every few tics
 
 
 func begin(message: Dictionary = {}) -> void:
-	player.disable_jump_for_time(0.5)
+	player.dust_particles.emitting = true
+
+
+func end(message: Dictionary = {}) -> void:
+	player.dust_particles.emitting = false

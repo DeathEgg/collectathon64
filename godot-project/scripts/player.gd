@@ -1,5 +1,7 @@
 class_name Player extends CharacterBody3D
 
+@onready var dust_particles: GPUParticles3D = $DustParticles
+
 @export var camera_manager: Node3D
 
 const MAX_SPEED = 320.0
