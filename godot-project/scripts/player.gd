@@ -4,7 +4,7 @@ class_name Player extends CharacterBody3D
 
 @export var camera_manager: Node3D
 
-const MAX_SPEED = 320.0
+const MAX_SPEED = 400.0
 const COYOTE_TIME_MAX = 0.1
 const JUMP_BUFFER_MAX = 0.1
 const MAX_FLOOR_ANGLE = 20.0
