@@ -6,7 +6,11 @@ const _VARIABLE_JUMP_HEIGHT_MAX_SPEED = 3.0
 var _jumped = false
 
 func _jump():
-	player.velocity.y = _JUMP_VELOCITY
+	if player.get_floor_angle(player.up_direction) > deg_to_rad(player.MAX_FLOOR_ANGLE):
+		var floor_normal = player.get_floor_normal()
+		player.velocity += _JUMP_VELOCITY * floor_normal
+	else:
+		player.velocity.y = _JUMP_VELOCITY
 	_jumped = true
 
 
@@ -44,7 +48,9 @@ func physics_update(delta) -> void:
 	
 	# check if the player has landed
 	if player.is_on_floor():
-		if player.jump_buffer_active():
+		if not player.is_on_walkable_angle():
+			state_machine.transition_to("Slide")
+		elif player.jump_buffer_active():
 			_jump()
 		else:
 			state_machine.transition_to("Walk")

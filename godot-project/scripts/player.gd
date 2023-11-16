@@ -7,6 +7,7 @@ class_name Player extends CharacterBody3D
 const MAX_SPEED = 320.0
 const COYOTE_TIME_MAX = 0.1
 const JUMP_BUFFER_MAX = 0.1
+const MAX_FLOOR_ANGLE = 20.0
 
 var movement_speed: float
 var movement_velocity: Vector3
@@ -44,7 +45,7 @@ func can_jump() -> bool:
 
 func is_on_walkable_angle():
 	if is_on_floor():
-		if get_floor_angle(up_direction) < deg_to_rad(20.0):
+		if get_floor_angle(up_direction) < deg_to_rad(MAX_FLOOR_ANGLE):
 			return true
 	
 	return false

@@ -29,6 +29,7 @@ func physics_update(delta) -> void:
 
 func begin(message: Dictionary = {}) -> void:
 	player.dust_particles.emitting = true
+	player.disable_jump_for_time(0.2)
 
 
 func end(message: Dictionary = {}) -> void:
