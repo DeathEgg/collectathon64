@@ -15,9 +15,10 @@ func _jump():
 
 
 func input(event : InputEvent) -> void:
-	# jump during coyote time
-	if not _jumped and Input.is_action_just_pressed("jump") and player.coyote_time > 0:
-		_jump()
+	if player.can_take_input():
+		# jump during coyote time
+		if not _jumped and Input.is_action_just_pressed("jump") and player.coyote_time > 0:
+			_jump()
 
 
 func physics_update(delta) -> void:
@@ -32,8 +33,9 @@ func physics_update(delta) -> void:
 	# movement
 	var player_input = Vector3.ZERO
 	
-	player_input.x = Input.get_axis("move_left", "move_right")
-	player_input.z = Input.get_axis("move_forward", "move_backward")
+	if player.can_take_input():
+		player_input.x = Input.get_axis("move_left", "move_right")
+		player_input.z = Input.get_axis("move_forward", "move_backward")
 	
 	player_input = player_input.rotated(Vector3.UP, player.camera_manager.rotation.y)
 	

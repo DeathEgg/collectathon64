@@ -16,7 +16,7 @@ var rotation_direction: float
 # jump related variables
 var coyote_time = COYOTE_TIME_MAX
 var _jump_buffer = 0.0
-var _disable_jump_timer = 0.0
+var _disable_input_timer = 0.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = 15.0 #ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -35,12 +35,12 @@ func jump_buffer_active() -> bool:
 	return _jump_buffer > 0.0
 
 
-func disable_jump_for_time(disable_length):
-	_disable_jump_timer = disable_length
+func disable_input_for_time(disable_length):
+	_disable_input_timer = disable_length
 
 
-func can_jump() -> bool:
-	return _disable_jump_timer <= 0.0
+func can_take_input() -> bool:
+	return _disable_input_timer <= 0.0
 
 
 func is_on_walkable_angle():
@@ -70,5 +70,5 @@ func _ready():
 func _physics_process(delta):
 	if _jump_buffer > 0:
 		_jump_buffer -= delta
-	if _disable_jump_timer > 0:
-		_disable_jump_timer -= delta
+	if _disable_input_timer > 0:
+		_disable_input_timer -= delta

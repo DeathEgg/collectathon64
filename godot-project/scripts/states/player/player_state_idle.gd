@@ -2,17 +2,18 @@ class_name PlayerStateIdle extends PlayerState
 
 
 func input(event : InputEvent) -> void:
-	if Input.is_action_just_pressed("jump") and player.can_jump():
-		state_machine.transition_to("Air", { "jump": true })
-		return
+	if player.can_take_input():
+		if Input.is_action_just_pressed("jump"):
+			state_machine.transition_to("Air", { "jump": true })
+			return
 		
-	'''if Input.is_action_just_pressed("action"):
-		state_machine.transition_to("Action")
-		return
+		'''if Input.is_action_just_pressed("action"):
+			state_machine.transition_to("Action")
+			return
 		
-	if Input.is_action_just_pressed("crouch"):
-		state_machine.transition_to("Crouch")
-		return'''
+		if Input.is_action_just_pressed("crouch"):
+			state_machine.transition_to("Crouch")
+			return'''
 
 
 func physics_update(delta) -> void:
@@ -23,8 +24,9 @@ func physics_update(delta) -> void:
 	# check if player is moving
 	var player_input = Vector3.ZERO
 	
-	player_input.x = Input.get_axis("move_left", "move_right")
-	player_input.z = Input.get_axis("move_forward", "move_backward")
+	if player.can_take_input():
+		player_input.x = Input.get_axis("move_left", "move_right")
+		player_input.z = Input.get_axis("move_forward", "move_backward")
 	
 	if player_input.x or player_input.z and player.is_on_floor():
 		state_machine.transition_to("Walk")
