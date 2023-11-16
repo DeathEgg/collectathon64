@@ -11,9 +11,9 @@ func physics_update(delta) -> void:
 	
 	# orient player to slide down the slope
 	var down_slope_direction = player.get_floor_normal()
-	down_slope_direction.y = 0
+	down_slope_direction.y = -down_slope_direction.y
 	
-	var movement_velocity: Vector3 = down_slope_direction.normalized() * player.movement_speed * delta
+	var movement_velocity: Vector3 = down_slope_direction * player.movement_speed * delta
 	var applied_velocity = player.velocity.lerp(movement_velocity, delta * 10)
 	
 	player.velocity.x = applied_velocity.x
@@ -24,3 +24,6 @@ func physics_update(delta) -> void:
 	
 	if player.is_on_walkable_angle():
 		state_machine.transition_to("Walk")
+		return
+	
+	# todo: spawn dust particles every few tics
