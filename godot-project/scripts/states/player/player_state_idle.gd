@@ -21,12 +21,12 @@ func physics_update(delta) -> void:
 	player.rotate_toward_forward_vector(delta)
 	
 	# check if player is moving
-	var input = Vector3.ZERO
+	var player_input = Vector3.ZERO
 	
-	input.x = Input.get_axis("move_left", "move_right")
-	input.z = Input.get_axis("move_forward", "move_backward")
+	player_input.x = Input.get_axis("move_left", "move_right")
+	player_input.z = Input.get_axis("move_forward", "move_backward")
 	
-	if input.x or input.z and player.is_on_floor():
+	if player_input.x or player_input.z and player.is_on_floor():
 		state_machine.transition_to("Walk")
 	
 	# check if the player had the rug pulled out from under them

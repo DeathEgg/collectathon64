@@ -21,14 +21,14 @@ func physics_update(delta) -> void:
 	player.apply_gravity(delta)
 	
 	# movement
-	var input = Vector3.ZERO
+	var player_input = Vector3.ZERO
 	
-	input.x = Input.get_axis("move_left", "move_right")
-	input.z = Input.get_axis("move_forward", "move_backward")
+	player_input.x = Input.get_axis("move_left", "move_right")
+	player_input.z = Input.get_axis("move_forward", "move_backward")
 	
-	input = input.rotated(Vector3.UP, player.camera_manager.rotation.y).normalized()
+	player_input = player_input.rotated(Vector3.UP, player.camera_manager.rotation.y)
 	
-	var movement_velocity = input * player.movement_speed * delta
+	var movement_velocity = player_input * player.movement_speed * delta
 	var applied_velocity = player.velocity.lerp(movement_velocity, delta * ACCELERATION)
 	
 	player.velocity.x = applied_velocity.x
