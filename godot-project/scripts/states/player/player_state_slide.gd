@@ -2,7 +2,7 @@ class_name PlayerStateSlide extends PlayerState
 
 
 func input(event : InputEvent) -> void:
-	if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("jump") and player.can_jump():
 		state_machine.transition_to("Air", { "jump": true })
 
 
@@ -27,3 +27,7 @@ func physics_update(delta) -> void:
 		return
 	
 	# todo: spawn dust particles every few tics
+
+
+func begin(message: Dictionary = {}) -> void:
+	player.disable_jump_for_time(0.5)

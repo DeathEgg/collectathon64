@@ -2,7 +2,7 @@ class_name PlayerStateIdle extends PlayerState
 
 
 func input(event : InputEvent) -> void:
-	if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("jump") and player.can_jump():
 		state_machine.transition_to("Air", { "jump": true })
 		return
 		
