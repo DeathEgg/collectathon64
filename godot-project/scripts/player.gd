@@ -7,7 +7,7 @@ class_name Player extends CharacterBody3D
 const MAX_SPEED = 400.0
 const COYOTE_TIME_MAX = 0.1
 const JUMP_BUFFER_MAX = 0.1
-const MAX_FLOOR_ANGLE = 20.0
+const MAX_FLOOR_ANGLE = 40.0
 
 var movement_speed: float
 var movement_velocity: Vector3
