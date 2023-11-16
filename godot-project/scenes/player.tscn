@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://x0ujt41u6f3"]
+[gd_scene load_steps=15 format=3 uid="uid://x0ujt41u6f3"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_6un1i"]
 [ext_resource type="Texture2D" uid="uid://dnkeovol43ev1" path="res://textures/effects/particles/particle_sprite_smoke.png" id="2_733cv"]
 [ext_resource type="Script" path="res://scripts/state_machine.gd" id="2_wp0gc"]
+[ext_resource type="Texture2D" uid="uid://bvtmntr2s86us" path="res://textures/blob_shadow.png" id="3_s5lsq"]
 [ext_resource type="Script" path="res://scripts/states/player/player_state_idle.gd" id="3_s5tx1"]
 [ext_resource type="Script" path="res://scripts/states/player/player_state_walk.gd" id="4_kwsvc"]
 [ext_resource type="Script" path="res://scripts/states/player/player_state_air.gd" id="5_a34fg"]
@@ -52,8 +53,9 @@ process_material = SubResource("ParticleProcessMaterial_bxf53")
 draw_pass_1 = SubResource("QuadMesh_64wao")
 
 [node name="Shadow" type="Decal" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-size = Vector3(1, 2, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+size = Vector3(1, 4, 1)
+texture_albedo = ExtResource("3_s5lsq")
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("2_wp0gc")
