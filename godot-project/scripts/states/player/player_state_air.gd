@@ -40,12 +40,7 @@ func physics_update(delta) -> void:
 	player.velocity.z = applied_velocity.z
 	
 	player.move_and_slide()
-	
-	# rotate to face player direction
-	if Vector2(player.velocity.z, player.velocity.x).length() > 0:
-		player.rotation_direction = Vector2(player.velocity.z, player.velocity.x).angle()
-		
-	player.rotation.y = lerp_angle(player.rotation.y, player.rotation_direction, delta * 10)
+	player.rotate_toward_forward_vector(delta)
 	
 	# check if the player has landed
 	if player.is_on_floor():

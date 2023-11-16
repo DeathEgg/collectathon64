@@ -35,16 +35,15 @@ func physics_update(delta) -> void:
 	player.velocity.z = applied_velocity.z
 	
 	player.move_and_slide()
-	
-	# rotate to face player direction
-	if Vector2(player.velocity.z, player.velocity.x).length() > 0:
-		player.rotation_direction = Vector2(player.velocity.z, player.velocity.x).angle()
-		
-	player.rotation.y = lerp_angle(player.rotation.y, player.rotation_direction, delta * 10)
+	player.rotate_toward_forward_vector(delta)
 	
 	# check if the player no longer on the ground
 	if not player.is_on_floor():
 		state_machine.transition_to("Air")
+	# check if the player is on a steep slope
+	elif not player.is_on_walkable_angle():
+		# todo: make player try to run up the slope a bit first and slow them down
+		state_machine.transition_to("Slide")
 
 
 func begin(message: Dictionary = {}) -> void:

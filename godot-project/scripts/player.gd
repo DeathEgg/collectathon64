@@ -27,8 +27,23 @@ func reset_jump_buffer():
 	jump_buffer = JUMP_BUFFER_MAX
 
 
-func jump_buffer_active():
+func jump_buffer_active() -> bool:
 	return jump_buffer > 0.0
+
+
+func is_on_walkable_angle():
+	if is_on_floor():
+		if get_floor_angle(up_direction) < deg_to_rad(20.0):
+			return true
+	
+	return false
+
+
+func rotate_toward_forward_vector(delta):
+	if Vector2(velocity.z, velocity.x).length() > 0:
+		rotation_direction = Vector2(velocity.z, velocity.x).angle()
+		
+	rotation.y = lerp_angle(rotation.y, rotation_direction, delta * 10)
 
 
 func _unhandled_input(event):

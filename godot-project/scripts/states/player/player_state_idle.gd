@@ -18,12 +18,7 @@ func input(event : InputEvent) -> void:
 func physics_update(delta) -> void:
 	player.apply_gravity(delta)
 	player.move_and_slide()
-	
-	# rotate to face player direction
-	if Vector2(player.velocity.z, player.velocity.x).length() > 0:
-		player.rotation_direction = Vector2(player.velocity.z, player.velocity.x).angle()
-		
-	player.rotation.y = lerp_angle(player.rotation.y, player.rotation_direction, delta * 10)
+	player.rotate_toward_forward_vector(delta)
 	
 	# check if player is moving
 	var input = Vector3.ZERO
@@ -34,11 +29,12 @@ func physics_update(delta) -> void:
 	if input.x or input.z and player.is_on_floor():
 		state_machine.transition_to("Walk")
 	
-	
-	
 	# check if the player had the rug pulled out from under them
 	if not player.is_on_floor():
-		pass # transition to falling?
+		state_machine.transition_to("Air")
+	# check if the player is on a steep slope
+	elif not player.is_on_walkable_angle():
+		state_machine.transition_to("Slide")
 
 
 func begin(message: Dictionary = {}) -> void:
