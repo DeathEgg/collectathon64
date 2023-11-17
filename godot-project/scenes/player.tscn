@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://x0ujt41u6f3"]
+[gd_scene load_steps=16 format=3 uid="uid://x0ujt41u6f3"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_6un1i"]
 [ext_resource type="Texture2D" uid="uid://dnkeovol43ev1" path="res://textures/effects/particles/particle_sprite_smoke.png" id="2_733cv"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/states/player/player_state_walk.gd" id="4_kwsvc"]
 [ext_resource type="Script" path="res://scripts/states/player/player_state_air.gd" id="5_a34fg"]
 [ext_resource type="Script" path="res://scripts/states/player/player_state_slide.gd" id="6_f7lnn"]
+[ext_resource type="Script" path="res://scripts/states/player/player_state_crouch.gd" id="9_v0yug"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i21yo"]
 
@@ -39,12 +40,16 @@ script = ExtResource("1_6un1i")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_i21yo")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("CapsuleMesh_rseqs")
+[node name="Meshes" type="Node3D" parent="."]
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Meshes"]
+mesh = SubResource("CapsuleMesh_rseqs")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Meshes"]
 transform = Transform3D(1, 0, 0, 0, 0.496107, 0, 0, 0, 0.382032, 0, 0.384072, 0.459374)
 mesh = SubResource("BoxMesh_mjas0")
+skeleton = NodePath("../..")
 
 [node name="DustParticles" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
@@ -73,3 +78,6 @@ script = ExtResource("5_a34fg")
 
 [node name="Slide" type="Node" parent="StateMachine"]
 script = ExtResource("6_f7lnn")
+
+[node name="Crouch" type="Node" parent="StateMachine"]
+script = ExtResource("9_v0yug")

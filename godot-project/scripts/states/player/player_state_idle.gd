@@ -9,11 +9,11 @@ func input(event : InputEvent) -> void:
 		
 		'''if Input.is_action_just_pressed("action"):
 			state_machine.transition_to("Action")
-			return
+			return'''
 		
 		if Input.is_action_just_pressed("crouch"):
 			state_machine.transition_to("Crouch")
-			return'''
+			return
 
 
 func physics_update(delta) -> void:

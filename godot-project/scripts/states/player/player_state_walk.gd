@@ -1,8 +1,6 @@
 class_name PlayerStateWalk extends PlayerState
 
 
-const ACCELERATION = 8.0
-
 func input(event : InputEvent) -> void:
 	if player.can_take_input():
 		if Input.is_action_just_pressed("jump"):
@@ -11,11 +9,11 @@ func input(event : InputEvent) -> void:
 		
 		'''if Input.is_action_just_pressed("action"):
 			state_machine.transition_to("Action")
-			return
+			return'''
 		
 		if Input.is_action_just_pressed("crouch"):
 			state_machine.transition_to("Crouch")
-			return'''
+			return
 
 
 func physics_update(delta) -> void:
@@ -31,7 +29,7 @@ func physics_update(delta) -> void:
 	player_input = player_input.rotated(Vector3.UP, player.camera_manager.rotation.y)
 	
 	var movement_velocity = player_input * player.movement_speed * delta
-	var applied_velocity = player.velocity.lerp(movement_velocity, delta * ACCELERATION)
+	var applied_velocity = player.velocity.lerp(movement_velocity, delta * player.ACCELERATION)
 	
 	player.velocity.x = applied_velocity.x
 	player.velocity.z = applied_velocity.z

@@ -1,10 +1,15 @@
 class_name Player extends CharacterBody3D
 
+@onready var collision_shape: CollisionShape3D = $CollisionShape3D
+@onready var temp_meshes: Node3D = $Meshes
 @onready var dust_particles: GPUParticles3D = $DustParticles
 
 @export var camera_manager: Node3D
 
 const MAX_SPEED = 400.0
+const ACCELERATION = 8.0
+const DECELERATION = ACCELERATION
+
 const COYOTE_TIME_MAX = 0.1
 const JUMP_BUFFER_MAX = 0.1
 const MAX_FLOOR_ANGLE = 40.0
