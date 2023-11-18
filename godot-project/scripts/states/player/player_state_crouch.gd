@@ -3,6 +3,12 @@ class_name PlayerStateCrouch extends PlayerState
 
 const _CROUCH_DECELERATION = 2.0
 
+func input(event : InputEvent) -> void:
+	if player.can_take_input():
+		if Input.is_action_just_pressed("jump"):
+			state_machine.transition_to("Air", { "backflip": true })
+			
+
 func physics_update(delta) -> void:
 	player.apply_gravity(delta)
 	
@@ -38,3 +44,5 @@ func begin(message: Dictionary = {}) -> void:
 func end(message: Dictionary = {}) -> void:
 	player.temp_meshes.scale = Vector3.ONE
 	player.temp_meshes.position += Vector3(0.0, 0.5, 0.0)
+	
+	player.dust_particles.emitting = false

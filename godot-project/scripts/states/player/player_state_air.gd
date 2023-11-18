@@ -1,24 +1,43 @@
 class_name PlayerStateAir extends PlayerState
 
 
-const _JUMP_VELOCITY = 8.0
-const _VARIABLE_JUMP_HEIGHT_MAX_SPEED = 3.0
-var _jumped = false
+enum _JumpType { NONE, JUMP, BACKFLIP }
+var _jump_type: _JumpType = _JumpType.NONE
 
-func _jump():
+const _JUMP_SPEED = 8.0
+const _BACKFLIP_SPEED = 10.0
+const _VARIABLE_JUMP_HEIGHT_MAX_SPEED = 3.0
+
+func _jump(type: _JumpType):
+	var jump_speed: float = 0.0
+	
+	# determine initial jump speed based on type of jump
+	assert(type != _JumpType.NONE)
+	match type:
+		_JumpType.JUMP:
+			jump_speed = _JUMP_SPEED
+		_JumpType.BACKFLIP:
+			jump_speed = _BACKFLIP_SPEED
+	
+	# jump at an angle if jumping from a steep slope
 	if player.get_floor_angle(player.up_direction) > deg_to_rad(player.MAX_FLOOR_ANGLE):
 		var floor_normal = player.get_floor_normal()
-		player.velocity += _JUMP_VELOCITY * floor_normal
+		player.velocity += jump_speed * floor_normal
 	else:
-		player.velocity.y = _JUMP_VELOCITY
-	_jumped = true
+		player.velocity.y = jump_speed
+	
+	_jump_type = type
+
+
+func _has_jumped() -> bool:
+	return _jump_type != _JumpType.NONE
 
 
 func input(event : InputEvent) -> void:
 	if player.can_take_input():
 		# jump during coyote time
-		if not _jumped and Input.is_action_just_pressed("jump") and player.coyote_time > 0:
-			_jump()
+		if not _has_jumped() and Input.is_action_just_pressed("jump") and player.coyote_time > 0:
+			_jump(_JumpType.JUMP)
 
 
 func physics_update(delta) -> void:
@@ -26,7 +45,7 @@ func physics_update(delta) -> void:
 	player.coyote_time -= delta
 	
 	# variable jump height (it's here rather than input due to jump buffering)
-	if _jumped and not Input.is_action_pressed("jump"):
+	if _has_jumped() and not Input.is_action_pressed("jump"):
 		if player.velocity.y > _VARIABLE_JUMP_HEIGHT_MAX_SPEED:
 			player.velocity.y = _VARIABLE_JUMP_HEIGHT_MAX_SPEED
 	
@@ -53,16 +72,18 @@ func physics_update(delta) -> void:
 		if not player.is_on_walkable_angle():
 			state_machine.transition_to("Slide")
 		elif player.jump_buffer_active():
-			_jump()
+			_jump(_JumpType.JUMP)
 		else:
 			state_machine.transition_to("Walk")
 
 
 func begin(message: Dictionary = {}) -> void:
 	if message.has("jump") and message.jump == true:
-		_jump()
+		_jump(_JumpType.JUMP)
+	if message.has("backflip") and message.backflip == true:
+		_jump(_JumpType.BACKFLIP)
 
 
 func end(message: Dictionary = {}) -> void:
 	player.coyote_time = player.COYOTE_TIME_MAX
-	_jumped = false
+	_jump_type = _JumpType.NONE
