@@ -7,7 +7,6 @@ func physics_update(delta) -> void:
 	player.apply_gravity(delta)
 	
 	player.velocity = player.velocity.lerp(Vector3.ZERO, delta * _CROUCH_DECELERATION)
-	print(player.velocity)
 	
 	player.move_and_slide()
 	player.rotate_toward_forward_vector(delta)
