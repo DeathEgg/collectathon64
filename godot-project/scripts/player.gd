@@ -24,7 +24,7 @@ var _jump_buffer = 0.0
 var _disable_input_timer = 0.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = 15.0 #ProjectSettings.get_setting("physics/3d/default_gravity")
+var gravity = 20.0 #ProjectSettings.get_setting("physics/3d/default_gravity")
 var gravity_direction = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 
 

@@ -4,8 +4,8 @@ class_name PlayerStateAir extends PlayerState
 enum _JumpType { NONE, JUMP, BACKFLIP }
 var _jump_type: _JumpType = _JumpType.NONE
 
-const _JUMP_SPEED = 8.0
-const _BACKFLIP_SPEED = 10.0
+const _JUMP_SPEED = 10.0
+const _BACKFLIP_SPEED = 13.0
 const _VARIABLE_JUMP_HEIGHT_MAX_SPEED = 3.0
 
 func _jump(type: _JumpType):
@@ -45,7 +45,7 @@ func physics_update(delta) -> void:
 	player.coyote_time -= delta
 	
 	# variable jump height (it's here rather than input due to jump buffering)
-	if _has_jumped() and not Input.is_action_pressed("jump"):
+	if _has_jumped() and not Input.is_action_pressed("jump") and _jump_type != _JumpType.BACKFLIP:
 		if player.velocity.y > _VARIABLE_JUMP_HEIGHT_MAX_SPEED:
 			player.velocity.y = _VARIABLE_JUMP_HEIGHT_MAX_SPEED
 	
@@ -58,7 +58,14 @@ func physics_update(delta) -> void:
 	
 	player_input = player_input.rotated(Vector3.UP, player.camera_manager.rotation.y)
 	
-	var movement_velocity = player_input * player.movement_speed * delta
+	var movement_speed = Vector3.ZERO
+	match _jump_type:
+		_JumpType.JUMP:
+			movement_speed = player.movement_speed
+		_JumpType.BACKFLIP:
+			movement_speed = player.movement_speed / 4.0
+	
+	var movement_velocity = player_input * movement_speed * delta
 	var applied_velocity = player.velocity.lerp(movement_velocity, delta * 10)
 	
 	player.velocity.x = applied_velocity.x

@@ -19,7 +19,6 @@ func physics_update(delta) -> void:
 	var applied_velocity = player.velocity.lerp(movement_velocity, delta * 10)
 	var is_on_walkable_angle = player.is_on_walkable_angle()
 	
-	print(applied_velocity)
 	player.velocity.x = applied_velocity.x
 	if not is_on_walkable_angle:
 		player.velocity.y = -player.gravity
