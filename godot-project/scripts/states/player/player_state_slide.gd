@@ -46,7 +46,7 @@ func begin(message: Dictionary = {}) -> void:
 	player.dust_particles.emitting = true
 	player.disable_input_for_time(0.2)
 	
-	_current_slide_speed = 0.0
+	_current_slide_speed = 150.0
 	player.velocity = Vector3.ZERO
 
 

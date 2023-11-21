@@ -1,6 +1,9 @@
 class_name PlayerStateWalk extends PlayerState
 
 
+const _SLOW_DOWN_ON_SLOPE_SCALAR = 300.0
+var _current_max_walk_speed = 0.0
+
 func input(event : InputEvent) -> void:
 	if player.can_take_input():
 		if Input.is_action_just_pressed("jump"):
@@ -26,7 +29,7 @@ func physics_update(delta) -> void:
 	
 	player_input = player_input.rotated(Vector3.UP, player.camera_manager.rotation.y)
 	
-	var movement_velocity = player_input * player.movement_speed * delta
+	var movement_velocity = player_input * _current_max_walk_speed * delta
 	var applied_velocity = player.velocity.lerp(movement_velocity, delta * player.ACCELERATION)
 	
 	player.velocity.x = applied_velocity.x
@@ -41,9 +44,14 @@ func physics_update(delta) -> void:
 		state_machine.transition_to("Air")
 	# check if the player is on a steep slope
 	elif not player.is_on_walkable_angle():
-		# todo: make player try to run up the slope a bit first and slow them down
-		state_machine.transition_to("Slide")
+		# todo: let player try to run up the slope a bit first and slow them down
+		if _current_max_walk_speed > 20.0:
+			_current_max_walk_speed -= _SLOW_DOWN_ON_SLOPE_SCALAR * delta
+		else:
+			state_machine.transition_to("Slide")
+	else:
+		_current_max_walk_speed = player.movement_speed
 
 
 func begin(message: Dictionary = {}) -> void:
-	pass
+	_current_max_walk_speed = player.movement_speed
