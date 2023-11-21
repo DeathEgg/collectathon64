@@ -50,10 +50,21 @@ func can_take_input() -> bool:
 
 func is_on_walkable_angle():
 	if is_on_floor():
-		if get_floor_angle(up_direction) < deg_to_rad(MAX_FLOOR_ANGLE):
-			return true
+		return get_floor_angle(up_direction) < deg_to_rad(MAX_FLOOR_ANGLE)
 	
 	return false
+
+
+func floor_is_directly_below() -> bool:
+	var space_state = get_world_3d().direct_space_state
+	
+	var start = Vector3.ZERO
+	var end = Vector3(0, -1, 0)
+	var query = PhysicsRayQueryParameters3D.create(start, end)
+	var result = space_state.intersect_ray(query)
+	
+	# todo: check if result is a floor
+	return not result.is_empty()
 
 
 func rotate_toward_forward_vector(delta):

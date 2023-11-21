@@ -17,8 +17,6 @@ func input(event : InputEvent) -> void:
 
 
 func physics_update(delta) -> void:
-	player.apply_gravity(delta)
-	
 	# movement
 	var player_input = Vector3.ZERO
 	
@@ -34,6 +32,7 @@ func physics_update(delta) -> void:
 	player.velocity.x = applied_velocity.x
 	player.velocity.z = applied_velocity.z
 	
+	player.apply_gravity(delta)
 	player.move_and_slide()
 	player.rotate_toward_forward_vector(delta)
 	

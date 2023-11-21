@@ -60,13 +60,15 @@ func physics_update(delta) -> void:
 	
 	var movement_speed = Vector3.ZERO
 	match _jump_type:
+		_JumpType.NONE:
+			movement_speed = player.movement_speed
 		_JumpType.JUMP:
 			movement_speed = player.movement_speed
 		_JumpType.BACKFLIP:
 			movement_speed = player.movement_speed / 4.0
 	
 	var movement_velocity = player_input * movement_speed * delta
-	var applied_velocity = player.velocity.lerp(movement_velocity, delta * 10)
+	var applied_velocity = player.velocity.lerp(movement_velocity, delta * player.ACCELERATION)
 	
 	player.velocity.x = applied_velocity.x
 	player.velocity.z = applied_velocity.z
