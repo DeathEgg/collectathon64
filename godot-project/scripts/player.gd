@@ -67,11 +67,11 @@ func floor_is_directly_below() -> bool:
 	return not result.is_empty()
 
 
-func rotate_toward_forward_vector(delta):
+func rotate_toward_forward_vector(delta, rotation_speed = 10):
 	if Vector2(velocity.z, velocity.x).length() > 0:
 		rotation_direction = Vector2(velocity.z, velocity.x).angle()
 		
-	rotation.y = lerp_angle(rotation.y, rotation_direction, delta * 10)
+	rotation.y = lerp_angle(rotation.y, rotation_direction, delta * rotation_speed)
 
 
 func _unhandled_input(event):

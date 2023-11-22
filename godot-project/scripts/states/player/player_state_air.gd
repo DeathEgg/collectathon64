@@ -36,7 +36,7 @@ func _has_jumped() -> bool:
 func input(event : InputEvent) -> void:
 	if player.can_take_input():
 		# jump during coyote time
-		if not _has_jumped() and Input.is_action_just_pressed("jump") and player.coyote_time > 0:
+		if not _has_jumped() and event.is_action_pressed("jump") and player.coyote_time > 0:
 			_jump(_JumpType.JUMP)
 
 

@@ -3,15 +3,15 @@ class_name PlayerStateIdle extends PlayerState
 
 func input(event : InputEvent) -> void:
 	if player.can_take_input():
-		if Input.is_action_just_pressed("jump"):
+		if event.is_action_pressed("jump"):
 			state_machine.transition_to("Air", { "jump": true })
 			return
 		
-		'''if Input.is_action_just_pressed("action"):
+		'''if event.is_action_pressed("action"):
 			state_machine.transition_to("Action")
 			return'''
 		
-		if Input.is_action_just_pressed("crouch"):
+		if event.is_action_pressed("crouch"):
 			state_machine.transition_to("Crouch")
 			return
 

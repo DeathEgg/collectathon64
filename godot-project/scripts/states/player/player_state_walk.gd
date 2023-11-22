@@ -2,19 +2,20 @@ class_name PlayerStateWalk extends PlayerState
 
 
 const _SLOW_DOWN_ON_SLOPE_SCALAR = 300.0
+const _MIN_SLOPE_GRIP_SPEED = 20.0
 var _current_max_walk_speed = 0.0
 
 func input(event : InputEvent) -> void:
 	if player.can_take_input():
-		if Input.is_action_just_pressed("jump"):
+		if event.is_action_pressed("jump"):
 			state_machine.transition_to("Air", { "jump": true })
 			return
 		
-		'''if Input.is_action_just_pressed("action"):
+		'''if event.is_action_pressed("action"):
 			state_machine.transition_to("Action")
 			return'''
 		
-		if Input.is_action_just_pressed("crouch"):
+		if event.is_action_pressed("crouch"):
 			state_machine.transition_to("Crouch")
 			return
 
@@ -37,20 +38,23 @@ func physics_update(delta) -> void:
 	
 	player.apply_gravity(delta)
 	player.move_and_slide()
-	player.rotate_toward_forward_vector(delta)
 	
 	# check if the player no longer on the ground
 	if not player.is_on_floor():
 		state_machine.transition_to("Air")
+		player.rotate_toward_forward_vector(delta)
 	# check if the player is on a steep slope
 	elif not player.is_on_walkable_angle():
-		# todo: let player try to run up the slope a bit first and slow them down
-		if _current_max_walk_speed > 20.0:
+		var floor_normal = player.get_floor_normal()
+		
+		if _current_max_walk_speed > _MIN_SLOPE_GRIP_SPEED and floor_normal.dot(player.velocity) < 0.0:
 			_current_max_walk_speed -= _SLOW_DOWN_ON_SLOPE_SCALAR * delta
+			player.rotate_toward_forward_vector(delta, 2)
 		else:
 			state_machine.transition_to("Slide")
 	else:
 		_current_max_walk_speed = player.movement_speed
+		player.rotate_toward_forward_vector(delta)
 
 
 func begin(message: Dictionary = {}) -> void:

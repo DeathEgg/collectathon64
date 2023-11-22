@@ -6,14 +6,14 @@ const _MAX_BACKFLIP_SPEED_SQUARED = 3.0 * 3.0
 
 func input(event : InputEvent) -> void:
 	if player.can_take_input() and player.velocity.length_squared() < _MAX_BACKFLIP_SPEED_SQUARED:
-		if Input.is_action_just_pressed("jump"):
+		if event.is_action_pressed("jump"):
 			state_machine.transition_to("Air", { "backflip": true })
 			
 
 func physics_update(delta) -> void:
 	player.apply_gravity(delta)
 	
-	player.velocity = player.velocity.lerp(Vector3.ZERO, delta * _CROUCH_DECELERATION)
+	player.velocity = player.velocity.lerp(Vector3.ZERO, _CROUCH_DECELERATION * delta)
 	
 	player.move_and_slide()
 	player.rotate_toward_forward_vector(delta)
