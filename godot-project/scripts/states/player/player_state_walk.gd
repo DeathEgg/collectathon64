@@ -47,7 +47,7 @@ func physics_update(delta) -> void:
 	elif not player.is_on_walkable_angle():
 		var floor_normal = player.get_floor_normal()
 		
-		if _current_max_walk_speed > _MIN_SLOPE_GRIP_SPEED and floor_normal.dot(player.velocity) < 0.0:
+		if _current_max_walk_speed > _MIN_SLOPE_GRIP_SPEED and floor_normal.dot(player.velocity) < -0.5:
 			_current_max_walk_speed -= _SLOW_DOWN_ON_SLOPE_SCALAR * delta
 			player.rotate_toward_forward_vector(delta, 2)
 		else:
