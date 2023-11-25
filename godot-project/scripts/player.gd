@@ -28,6 +28,24 @@ var gravity = 20.0 #ProjectSettings.get_setting("physics/3d/default_gravity")
 var gravity_direction = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 
 
+func disable_input_for_time(disable_length):
+	_disable_input_timer = disable_length
+
+
+func can_take_input() -> bool:
+	return _disable_input_timer <= 0.0
+
+
+func get_raw_player_movement_input():
+	var player_input = Vector3.ZERO
+	
+	if can_take_input():
+		player_input.x = Input.get_axis("move_left", "move_right")
+		player_input.z = Input.get_axis("move_forward", "move_backward")
+	
+	return player_input
+
+
 func apply_gravity(delta):
 	velocity += gravity * gravity_direction * delta
 
@@ -38,14 +56,6 @@ func reset_jump_buffer():
 
 func jump_buffer_active() -> bool:
 	return _jump_buffer > 0.0
-
-
-func disable_input_for_time(disable_length):
-	_disable_input_timer = disable_length
-
-
-func can_take_input() -> bool:
-	return _disable_input_timer <= 0.0
 
 
 func is_on_walkable_angle():

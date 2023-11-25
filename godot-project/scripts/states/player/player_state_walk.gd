@@ -22,12 +22,7 @@ func input(event : InputEvent) -> void:
 
 func physics_update(delta) -> void:
 	# movement
-	var player_input = Vector3.ZERO
-	
-	if player.can_take_input():
-		player_input.x = Input.get_axis("move_left", "move_right")
-		player_input.z = Input.get_axis("move_forward", "move_backward")
-	
+	var player_input = player.get_raw_player_movement_input()
 	player_input = player_input.rotated(Vector3.UP, player.camera_manager.rotation.y)
 	
 	var movement_velocity = player_input * _current_max_walk_speed * delta

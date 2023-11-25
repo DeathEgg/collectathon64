@@ -22,11 +22,7 @@ func physics_update(delta) -> void:
 	player.rotate_toward_forward_vector(delta)
 	
 	# check if player is moving
-	var player_input = Vector3.ZERO
-	
-	if player.can_take_input():
-		player_input.x = Input.get_axis("move_left", "move_right")
-		player_input.z = Input.get_axis("move_forward", "move_backward")
+	var player_input = player.get_raw_player_movement_input()
 	
 	if player_input.x or player_input.z and player.is_on_floor():
 		state_machine.transition_to("Walk")

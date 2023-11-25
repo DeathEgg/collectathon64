@@ -4,7 +4,7 @@ class_name PlayerStateSlide extends PlayerState
 const _SLIDE_CONTROL_LOCK_TIME = 0.2
 const _MIN_STARTING_SLIDE_SPEED = 150.0
 const _SLIDE_ON_FLOOR_DECELERATION = 50.0
-const _MAX_SLIDE_SPEED = 600.0
+const _MAX_SLIDE_SPEED = 50#600.0
 var _current_slide_speed = 0.0
 
 func _get_down_slope_direction():
@@ -21,11 +21,40 @@ func input(event : InputEvent) -> void:
 
 
 func physics_update(delta) -> void:
-	# orient player to slide down the slope
-	var down_slope_direction = _get_down_slope_direction()
+	# get player input for if they're trying to direct which direction to slide in
+	var player_input: Vector3 = player.get_raw_player_movement_input()
+	player_input = player_input.rotated(Vector3.UP, player.camera_manager.rotation.y)
 	
-	var movement_velocity: Vector3 = down_slope_direction * _current_slide_speed * delta
-	var applied_velocity: Vector3 = player.velocity.lerp(movement_velocity, delta * player.ACCELERATION)
+	var down_slope_direction: Vector3 = _get_down_slope_direction()
+	var slide_direction: Vector3
+	
+	const ACOS_MAX_ANGLE = 0.3
+	const MAX_ANGLE = cos(ACOS_MAX_ANGLE)
+	
+	if player_input != Vector3.ZERO:
+		var axis: Vector3 = down_slope_direction
+		axis.y = 0
+		axis = axis.normalized()
+		
+		if player_input.dot(down_slope_direction) >= ACOS_MAX_ANGLE:
+			slide_direction = player_input
+		elif player_input.dot(down_slope_direction) >= -ACOS_MAX_ANGLE:
+			
+			
+			if true:
+				slide_direction = down_slope_direction.rotated(axis, -MAX_ANGLE)
+			elif true:
+				slide_direction = down_slope_direction.rotated(axis, MAX_ANGLE)
+		else:
+			slide_direction = player.velocity.normalized()
+	else:
+		slide_direction = player.velocity.normalized()
+	
+	print(player_input.dot(down_slope_direction))
+	
+	
+	var movement_velocity: Vector3 = slide_direction * _current_slide_speed * delta
+	var applied_velocity: Vector3 = player.velocity.lerp(movement_velocity, player.ACCELERATION * delta)
 	
 	player.velocity.x = applied_velocity.x
 	player.velocity.y = movement_velocity.y
@@ -57,6 +86,9 @@ func begin(message: Dictionary = {}) -> void:
 	_current_slide_speed = player.velocity.length()
 	if _current_slide_speed < _MIN_STARTING_SLIDE_SPEED:
 		_current_slide_speed = _MIN_STARTING_SLIDE_SPEED
+	
+	# set initial direction for player to be sliding
+	player.velocity = _get_down_slope_direction()
 
 
 func end(message: Dictionary = {}) -> void:
