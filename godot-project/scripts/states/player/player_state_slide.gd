@@ -4,7 +4,9 @@ class_name PlayerStateSlide extends PlayerState
 const _SLIDE_CONTROL_LOCK_TIME = 0.2
 const _MIN_STARTING_SLIDE_SPEED = 150.0
 const _SLIDE_ON_FLOOR_DECELERATION = 50.0
-const _MAX_SLIDE_SPEED = 50#600.0
+const _MAX_SLIDE_SPEED = 600.0
+const _ACOS_MAX_ANGLE = 0.3
+const _MAX_ANGLE = cos(_ACOS_MAX_ANGLE)
 var _current_slide_speed = 0.0
 
 func _get_down_slope_direction():
@@ -28,30 +30,27 @@ func physics_update(delta) -> void:
 	var down_slope_direction: Vector3 = _get_down_slope_direction()
 	var slide_direction: Vector3
 	
-	const ACOS_MAX_ANGLE = 0.3
-	const MAX_ANGLE = cos(ACOS_MAX_ANGLE)
-	
 	if player_input != Vector3.ZERO:
 		var axis: Vector3 = down_slope_direction
 		axis.y = 0
 		axis = axis.normalized()
 		
-		if player_input.dot(down_slope_direction) >= ACOS_MAX_ANGLE:
+		# if within degree of facing forward
+		if player_input.dot(down_slope_direction) >= _ACOS_MAX_ANGLE:
 			slide_direction = player_input
-		elif player_input.dot(down_slope_direction) >= -ACOS_MAX_ANGLE:
+		elif player_input.dot(down_slope_direction) >= -_ACOS_MAX_ANGLE:
+			var forward_vector = down_slope_direction
+			forward_vector.y = 0
+			var cross_product = forward_vector.cross(player_input)
 			
-			
-			if true:
-				slide_direction = down_slope_direction.rotated(axis, -MAX_ANGLE)
-			elif true:
-				slide_direction = down_slope_direction.rotated(axis, MAX_ANGLE)
+			if cross_product.y > 0:
+				slide_direction = down_slope_direction.rotated(axis, _MAX_ANGLE)
+			else:
+				slide_direction = down_slope_direction.rotated(axis, -_MAX_ANGLE)
 		else:
 			slide_direction = player.velocity.normalized()
 	else:
 		slide_direction = player.velocity.normalized()
-	
-	print(player_input.dot(down_slope_direction))
-	
 	
 	var movement_velocity: Vector3 = slide_direction * _current_slide_speed * delta
 	var applied_velocity: Vector3 = player.velocity.lerp(movement_velocity, player.ACCELERATION * delta)
