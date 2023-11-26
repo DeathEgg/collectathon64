@@ -4,7 +4,9 @@ class_name Player extends CharacterBody3D
 @onready var temp_meshes: Node3D = $Meshes
 @onready var dust_particles: GPUParticles3D = $DustParticles
 
+@export_subgroup("External Systems")
 @export var camera_manager: Node3D
+@export var player_inventory: PlayerInventory
 
 const MAX_SPEED = 400.0
 const ACCELERATION = 8.0
