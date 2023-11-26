@@ -95,6 +95,13 @@ func rotate_toward_forward_vector(delta, rotation_speed = 10):
 	rotation.y = lerp_angle(rotation.y, rotation_direction, delta * rotation_speed)
 
 
+func face_forward_vector():
+	if Vector2(velocity.z, velocity.x).length() > 0:
+		rotation_direction = Vector2(velocity.z, velocity.x).angle()
+		
+	rotation.y = rotation_direction
+
+
 func _unhandled_input(event):
 	if event.is_action_pressed("jump"):
 		reset_jump_buffer()
@@ -109,10 +116,17 @@ func _physics_process(delta):
 		_jump_buffer -= delta
 	if _disable_input_timer > 0:
 		_disable_input_timer -= delta
+
+
+func _on_area_3d_area_entered(area: Area3D):
+	var collision_layer_value = area.get_collision_layer_value(4)
 	
-	if not is_invincible:
-		var collisions = area3d.get_overlapping_bodies()
-		
-		for entity in collisions:
-			state_machine.transition_to("Hurt")
-			break
+	if not is_invincible and collision_layer_value:
+		state_machine.transition_to("Hurt")
+
+
+func _on_area_3d_body_entered(body: Node3D):
+	var collision_layer_value = body.get_collision_layer_value(4)
+	
+	if not is_invincible and collision_layer_value:
+		state_machine.transition_to("Hurt")
