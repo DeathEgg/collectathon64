@@ -1,13 +1,18 @@
 class_name Player extends CharacterBody3D
 
-@onready var collision_shape: CollisionShape3D = $CollisionShape3D
-@onready var temp_meshes: Node3D = $Meshes
-@onready var dust_particles: GPUParticles3D = $DustParticles
-
+# export's
 @export_subgroup("External Systems")
 @export var camera_manager: Node3D
 @export var player_inventory: PlayerInventory
 
+# onready's
+@onready var collision_shape: CollisionShape3D = $SolidCollider
+@onready var area3d: Area3D = $Area3D
+@onready var temp_meshes: Node3D = $Meshes
+@onready var dust_particles: GPUParticles3D = $DustParticles
+@onready var state_machine: StateMachine = $StateMachine
+
+# constants
 const MAX_SPEED = 400.0
 const ACCELERATION = 8.0
 const DECELERATION = ACCELERATION
@@ -16,6 +21,7 @@ const COYOTE_TIME_MAX = 0.1
 const JUMP_BUFFER_MAX = 0.1
 const MAX_FLOOR_ANGLE = 40.0
 
+# movement variables
 var movement_speed: float
 var movement_velocity: Vector3
 var rotation_direction: float
@@ -25,9 +31,12 @@ var coyote_time = COYOTE_TIME_MAX
 var _jump_buffer = 0.0
 var _disable_input_timer = 0.0
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = 20.0 #ProjectSettings.get_setting("physics/3d/default_gravity")
 var gravity_direction = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
+
+# other
+var is_invincible = false
+var invincibility_timer = 0.0
 
 
 func disable_input_for_time(disable_length):
@@ -100,3 +109,10 @@ func _physics_process(delta):
 		_jump_buffer -= delta
 	if _disable_input_timer > 0:
 		_disable_input_timer -= delta
+	
+	if not is_invincible:
+		var collisions = area3d.get_overlapping_bodies()
+		
+		for entity in collisions:
+			state_machine.transition_to("Hurt")
+			break
