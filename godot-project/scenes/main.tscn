@@ -1,16 +1,22 @@
-[gd_scene load_steps=9 format=3 uid="uid://c1civaffp4cum"]
+[gd_scene load_steps=10 format=3 uid="uid://c1civaffp4cum"]
 
 [ext_resource type="PackedScene" uid="uid://x0ujt41u6f3" path="res://scenes/player.tscn" id="1_q06ur"]
 [ext_resource type="PackedScene" uid="uid://do1jdofvf1qll" path="res://scenes/camera_manager.tscn" id="2_56ffp"]
 [ext_resource type="PackedScene" uid="uid://cxaulv426a0kj" path="res://models/test_level.blend" id="3_bgftn"]
 [ext_resource type="Script" path="res://scripts/player_inventory.gd" id="4_1k126"]
 [ext_resource type="Texture2D" uid="uid://1q2fyj50u1m7" path="res://textures/test_tile.png" id="5_mjdy6"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xqjsp"]
-albedo_texture = ExtResource("5_mjdy6")
+[ext_resource type="Shader" path="res://shaders/n64_lit.gdshader" id="5_uy01r"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_17vl6"]
-material = SubResource("StandardMaterial3D_xqjsp")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1k7da"]
+render_priority = 0
+shader = ExtResource("5_uy01r")
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/albedoTex = ExtResource("5_mjdy6")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_w7d3u"]
 
@@ -39,6 +45,7 @@ collision_mask = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 mesh = SubResource("BoxMesh_17vl6")
+surface_material_override/0 = SubResource("ShaderMaterial_1k7da")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_w7d3u")
