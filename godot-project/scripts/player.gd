@@ -21,6 +21,8 @@ const COYOTE_TIME_MAX = 0.1
 const JUMP_BUFFER_MAX = 0.1
 const MAX_FLOOR_ANGLE = 40.0
 
+const MAX_INVINCIBILITY_TIMER = 3.0
+
 # movement variables
 var movement_speed: float
 var movement_velocity: Vector3
@@ -35,8 +37,7 @@ var gravity = 20.0 #ProjectSettings.get_setting("physics/3d/default_gravity")
 var gravity_direction = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 
 # other
-var is_invincible = false
-var invincibility_timer = 0.0
+var _invincibility_timer: float = 0.0
 
 
 func disable_input_for_time(disable_length):
@@ -67,6 +68,14 @@ func reset_jump_buffer():
 
 func jump_buffer_active() -> bool:
 	return _jump_buffer > 0.0
+
+
+func is_invincible():
+	return _invincibility_timer > 0.0 or state_machine.get_current_state_name() == "Hurt"
+
+
+func reset_invincibility_timer():
+	_invincibility_timer = MAX_INVINCIBILITY_TIMER
 
 
 func is_on_walkable_angle():
@@ -116,17 +125,29 @@ func _physics_process(delta):
 		_jump_buffer -= delta
 	if _disable_input_timer > 0:
 		_disable_input_timer -= delta
+	if is_invincible():
+		_invincibility_timer -= delta
+
+
+func _process(delta):
+	if _invincibility_timer <= 0.0:
+		temp_meshes.show()
+	else:
+		if Time.get_ticks_msec() % 300 < 150:
+			temp_meshes.show()
+		else:
+			temp_meshes.hide()
 
 
 func _on_area_3d_area_entered(area: Area3D):
 	var collision_layer_value = area.get_collision_layer_value(4)
 	
-	if not is_invincible and collision_layer_value:
+	if not is_invincible() and collision_layer_value:
 		state_machine.transition_to("Hurt")
 
 
 func _on_area_3d_body_entered(body: Node3D):
 	var collision_layer_value = body.get_collision_layer_value(4)
 	
-	if not is_invincible and collision_layer_value:
+	if not is_invincible() and collision_layer_value:
 		state_machine.transition_to("Hurt")

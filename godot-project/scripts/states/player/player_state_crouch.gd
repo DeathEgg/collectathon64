@@ -5,7 +5,7 @@ const _CROUCH_DECELERATION = 2.0
 const _MAX_BACKFLIP_SPEED_SQUARED = 3.0 * 3.0
 
 func input(event : InputEvent) -> void:
-	if player.can_take_input() and player.velocity.length_squared() < _MAX_BACKFLIP_SPEED_SQUARED:
+	if player.can_take_input():# and player.velocity.length_squared() < _MAX_BACKFLIP_SPEED_SQUARED:
 		if event.is_action_pressed("jump"):
 			state_machine.transition_to("Air", { "backflip": true })
 			

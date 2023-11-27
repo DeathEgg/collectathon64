@@ -8,12 +8,11 @@ func physics_update(delta) -> void:
 	player.move_and_slide()
 	
 	if player.is_on_floor():
+		player.velocity *= -1
 		state_machine.transition_to("Walk")
 
 
 func begin(message: Dictionary = {}) -> void:
-	player.is_invincible = true
-	
 	# face player model toward the front before changing vlocity
 	player.face_forward_vector()
 	
@@ -31,5 +30,4 @@ func begin(message: Dictionary = {}) -> void:
 
 
 func end(message: Dictionary = {}) -> void:
-	# temporary
-	player.is_invincible = false
+	player.reset_invincibility_timer()
