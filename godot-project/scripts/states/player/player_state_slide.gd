@@ -3,7 +3,7 @@ class_name PlayerStateSlide extends PlayerState
 
 const _SLIDE_CONTROL_LOCK_TIME = 0.2
 const _MIN_STARTING_SLIDE_SPEED = 150.0
-const _SLIDE_ON_FLOOR_DECELERATION = 50.0
+const _SLIDE_ON_FLOOR_DECELERATION = 1000.0
 const _MAX_SLIDE_SPEED = 600.0
 const _ACOS_MAX_ANGLE = 0.3
 const _MAX_ANGLE = cos(_ACOS_MAX_ANGLE)

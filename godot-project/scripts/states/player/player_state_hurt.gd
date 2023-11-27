@@ -17,7 +17,8 @@ func begin(message: Dictionary = {}) -> void:
 	player.face_forward_vector()
 	
 	# get direction player is facing
-	var forward_direction = player.velocity
+	var forward_direction: Vector3 = player.get_global_transform().basis.z
+	
 	forward_direction.y = 0
 	forward_direction = forward_direction.normalized()
 	

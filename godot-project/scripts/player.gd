@@ -13,7 +13,7 @@ class_name Player extends CharacterBody3D
 @onready var state_machine: StateMachine = $StateMachine
 
 # constants
-const MAX_SPEED = 400.0
+const MAX_SPEED = 500.0
 const ACCELERATION = 8.0
 const DECELERATION = ACCELERATION
 
@@ -127,6 +127,15 @@ func _physics_process(delta):
 		_disable_input_timer -= delta
 	if is_invincible():
 		_invincibility_timer -= delta
+	
+	if not is_invincible():
+		var collisions = area3d.get_overlapping_areas()
+		if not collisions.is_empty():
+			state_machine.transition_to("Hurt")
+	
+		collisions = area3d.get_overlapping_bodies()
+		if not collisions.is_empty():
+			state_machine.transition_to("Hurt")
 
 
 func _process(delta):
