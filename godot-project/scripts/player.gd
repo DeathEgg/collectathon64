@@ -148,6 +148,11 @@ func _physics_process(delta):
 		collisions = area3d.get_overlapping_bodies()
 		if not collisions.is_empty():
 			take_damage(1)
+	
+	# gross hack for falling off the world
+	if position.y < -10:
+		position = Vector3(0, 5, 0)
+		velocity = Vector3.ZERO
 
 
 func _process(delta):
