@@ -31,8 +31,7 @@ func physics_update(delta) -> void:
 	var slide_direction: Vector3
 	
 	if player_input != Vector3.ZERO:
-		var axis: Vector3 = down_slope_direction
-		axis.y = 0
+		var axis = Vector3(down_slope_direction.x, 0, down_slope_direction.z)
 		axis = axis.normalized()
 		
 		# if within degree of facing forward

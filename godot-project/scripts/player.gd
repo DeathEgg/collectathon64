@@ -111,6 +111,18 @@ func face_forward_vector():
 	rotation.y = rotation_direction
 
 
+func take_damage(amount):
+	player_inventory.health -= amount
+	
+	if player_inventory.health < 0:
+		player_inventory.health = 0
+		state_machine.transition_to("Die")
+	elif player_inventory.health == 0:
+		state_machine.transition_to("Die")
+	else:
+		state_machine.transition_to("Hurt")
+
+
 func _unhandled_input(event):
 	if event.is_action_pressed("jump"):
 		reset_jump_buffer()
@@ -131,11 +143,11 @@ func _physics_process(delta):
 	if not is_invincible():
 		var collisions = area3d.get_overlapping_areas()
 		if not collisions.is_empty():
-			state_machine.transition_to("Hurt")
+			take_damage(1)
 	
 		collisions = area3d.get_overlapping_bodies()
 		if not collisions.is_empty():
-			state_machine.transition_to("Hurt")
+			take_damage(1)
 
 
 func _process(delta):
@@ -152,11 +164,11 @@ func _on_area_3d_area_entered(area: Area3D):
 	var collision_layer_value = area.get_collision_layer_value(4)
 	
 	if not is_invincible() and collision_layer_value:
-		state_machine.transition_to("Hurt")
+		take_damage(1)
 
 
 func _on_area_3d_body_entered(body: Node3D):
 	var collision_layer_value = body.get_collision_layer_value(4)
 	
 	if not is_invincible() and collision_layer_value:
-		state_machine.transition_to("Hurt")
+		take_damage(1)
