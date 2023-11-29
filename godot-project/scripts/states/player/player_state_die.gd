@@ -6,7 +6,7 @@ func physics_update(delta) -> void:
 
 
 func begin(message: Dictionary = {}) -> void:
-	get_tree().reload_current_scene()
+	player.current_room.reset()
 
 
 func end(message: Dictionary = {}) -> void:

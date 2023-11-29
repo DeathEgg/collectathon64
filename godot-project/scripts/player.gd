@@ -4,6 +4,7 @@ class_name Player extends CharacterBody3D
 @export_subgroup("External Systems")
 @export var camera_manager: Node3D
 @export var player_inventory: PlayerInventory
+@export var current_room: Room
 
 # onready's
 @onready var collision_shape: CollisionShape3D = $SolidCollider
