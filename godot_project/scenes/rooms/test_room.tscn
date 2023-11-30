@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/room.gd" id="1_v67em"]
 [ext_resource type="PackedScene" uid="uid://x0ujt41u6f3" path="res://scenes/player.tscn" id="2_0b7ou"]
 [ext_resource type="PackedScene" uid="uid://do1jdofvf1qll" path="res://scenes/camera_manager.tscn" id="3_w6njl"]
-[ext_resource type="PackedScene" uid="uid://cxaulv426a0kj" path="res://models/test_level.blend" id="4_ear2f"]
+[ext_resource type="PackedScene" uid="uid://cvucoh18q6blj" path="res://models/Mountain.blend" id="4_3e8uc"]
 [ext_resource type="Script" path="res://scripts/player_inventory.gd" id="5_ecux3"]
 [ext_resource type="Shader" path="res://shaders/n64_lit.gdshader" id="6_xjbl3"]
 [ext_resource type="Texture2D" uid="uid://1q2fyj50u1m7" path="res://textures/test_tile.png" id="7_ac3id"]
@@ -35,10 +35,10 @@ current_room = NodePath("..")
 [node name="CameraManager" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_w6njl")]
 target = NodePath("../Player")
 
-[node name="test_level" parent="." instance=ExtResource("4_ear2f")]
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.954282, 0.298908, 0, -0.298908, 0.954282, 0, 27.035, 28.7113)
+transform = Transform3D(1, 0, 0, 0, 0.954282, 0.298908, 0, -0.298908, 0.954282, 0, 34.2079, 28.7113)
+
+[node name="Mountain" parent="." instance=ExtResource("4_3e8uc")]
 
 [node name="PlayerInventory" type="Node" parent="."]
 script = ExtResource("5_ecux3")
