@@ -1,0 +1,62 @@
+[gd_scene load_steps=12 format=3 uid="uid://bjor6edt4g32u"]
+
+[ext_resource type="Script" path="res://scripts/room.gd" id="1_v67em"]
+[ext_resource type="PackedScene" uid="uid://x0ujt41u6f3" path="res://scenes/player.tscn" id="2_0b7ou"]
+[ext_resource type="PackedScene" uid="uid://do1jdofvf1qll" path="res://scenes/camera_manager.tscn" id="3_w6njl"]
+[ext_resource type="PackedScene" uid="uid://cxaulv426a0kj" path="res://models/test_level.blend" id="4_ear2f"]
+[ext_resource type="Script" path="res://scripts/player_inventory.gd" id="5_ecux3"]
+[ext_resource type="Shader" path="res://shaders/n64_lit.gdshader" id="6_xjbl3"]
+[ext_resource type="Texture2D" uid="uid://1q2fyj50u1m7" path="res://textures/test_tile.png" id="7_ac3id"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="8_kqp6q"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_17vl6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1k7da"]
+render_priority = 0
+shader = ExtResource("6_xjbl3")
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/albedoTex = ExtResource("7_ac3id")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w7d3u"]
+
+[node name="TestRoom" type="Node" node_paths=PackedStringArray("player")]
+script = ExtResource("1_v67em")
+player = NodePath("Player")
+
+[node name="Player" parent="." node_paths=PackedStringArray("camera_manager", "player_inventory", "current_room") instance=ExtResource("2_0b7ou")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.77149, 0)
+camera_manager = NodePath("../CameraManager")
+player_inventory = NodePath("../PlayerInventory")
+current_room = NodePath("..")
+
+[node name="CameraManager" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_w6njl")]
+target = NodePath("../Player")
+
+[node name="test_level" parent="." instance=ExtResource("4_ear2f")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.954282, 0.298908, 0, -0.298908, 0.954282, 0, 27.035, 28.7113)
+
+[node name="PlayerInventory" type="Node" parent="."]
+script = ExtResource("5_ecux3")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.82278, 1.67003, 9.53909)
+collision_layer = 8
+collision_mask = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_17vl6")
+surface_material_override/0 = SubResource("ShaderMaterial_1k7da")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_w7d3u")
+
+[node name="TestHUD" type="RichTextLabel" parent="." node_paths=PackedStringArray("player_inventory")]
+offset_right = 168.0
+offset_bottom = 99.0
+script = ExtResource("8_kqp6q")
+player_inventory = NodePath("../PlayerInventory")
